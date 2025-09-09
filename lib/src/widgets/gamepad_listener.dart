@@ -8,17 +8,21 @@ import 'package:gamepads/gamepads.dart';
 class GamepadListener extends StatefulWidget {
   /// Create an instance.
   const GamepadListener({
-    required this.onEvent,
     required this.child,
+    this.onAnalog,
+    this.onButton,
     this.gamepadId,
     super.key,
   });
 
-  /// The method to call when an event has been received.
-  final void Function(GamepadListenerEvent event) onEvent;
-
   /// The widget below this widget in the tree.
   final Widget child;
+
+  /// The function to call when an analog control is used on this [ListTile].
+  final void Function(GamepadListenerAnalogEvent event)? onAnalog;
+
+  /// The function to call when a button is pressed on this [ListTile].
+  final void Function(GamepadListenerButtonEvent event)? onButton;
 
   /// The ID of the gamepad whose events should be streamed.
   ///
@@ -48,22 +52,24 @@ class GamepadListenerState extends State<GamepadListener> {
   }
 
   void _handleEvent(final GamepadEvent e) {
-    final GamepadListenerEvent event;
     switch (e.type) {
       case KeyType.analog:
-        event = GamepadListenerAnalogEvent(
-          gamepadId: e.gamepadId,
-          name: e.key,
-          value: e.value,
+        widget.onAnalog?.call(
+          GamepadListenerAnalogEvent(
+            gamepadId: e.gamepadId,
+            name: e.key,
+            value: e.value,
+          ),
         );
       case KeyType.button:
-        event = GamepadListenerButtonEvent(
-          gamepadId: e.gamepadId,
-          name: e.key,
-          state: e.value == 1.0 ? ButtonState.pressed : ButtonState.released,
+        widget.onButton?.call(
+          GamepadListenerButtonEvent(
+            gamepadId: e.gamepadId,
+            name: e.key,
+            state: e.value == 1.0 ? ButtonState.pressed : ButtonState.released,
+          ),
         );
     }
-    widget.onEvent(event);
   }
 
   /// Dispose of the widget.

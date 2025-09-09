@@ -32,24 +32,22 @@ class GamepadControls extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return GamepadListener(
-      onEvent: (event) {
-        switch (event) {
-          case GamepadListenerAnalogEvent():
-            for (final MapEntry(key: identifier, value: callback)
-                in analogHandlers.entries) {
-              if (identifier.matchesGamepadId(event.gamepadId) &&
-                  identifier.name == event.name) {
-                callback(event.gamepadId, event.value);
-              }
-            }
-          case GamepadListenerButtonEvent():
-            for (final MapEntry(key: identifier, value: callback)
-                in buttonHandlers.entries) {
-              if (identifier.matchesGamepadId(event.gamepadId) &&
-                  identifier.name == event.name) {
-                callback(event.gamepadId, event.state);
-              }
-            }
+      onAnalog: (event) {
+        for (final MapEntry(key: identifier, value: callback)
+            in analogHandlers.entries) {
+          if (identifier.matchesGamepadId(event.gamepadId) &&
+              identifier.name == event.name) {
+            callback(event.gamepadId, event.value);
+          }
+        }
+      },
+      onButton: (event) {
+        for (final MapEntry(key: identifier, value: callback)
+            in buttonHandlers.entries) {
+          if (identifier.matchesGamepadId(event.gamepadId) &&
+              identifier.name == event.name) {
+            callback(event.gamepadId, event.state);
+          }
         }
       },
       child: child,

@@ -97,9 +97,11 @@ class HomePageState extends State<HomePage> {
             description = '${event.name} ${event.state.name}';
         }
         return GamepadListener(
-          onEvent: (event) {
-            if (event is GamepadListenerButtonEvent &&
-                event.name == modeButton &&
+          onAnalog: (event) {
+            setState(() => _event = event);
+          },
+          onButton: (event) {
+            if (event.name == modeButton &&
                 event.state == ButtonState.released) {
               setState(() => _mode = _Mode.pretend);
             } else {

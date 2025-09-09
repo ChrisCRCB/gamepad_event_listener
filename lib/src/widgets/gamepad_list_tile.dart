@@ -56,16 +56,17 @@ class GamepadListTileState extends State<GamepadListTile> {
   @override
   Widget build(BuildContext context) {
     return GamepadListener(
-      onEvent: (event) {
+      onAnalog: (event) {
         if (!_focused) {
-          return; // Do nothing.
+          return;
         }
-        switch (event) {
-          case GamepadListenerAnalogEvent():
-            widget.onAnalog?.call(event);
-          case GamepadListenerButtonEvent():
-            widget.onButton?.call(event);
+        widget.onAnalog?.call(event);
+      },
+      onButton: (event) {
+        if (!_focused) {
+          return;
         }
+        widget.onButton?.call(event);
       },
       child: ListTile(
         autofocus: widget.autofocus,
