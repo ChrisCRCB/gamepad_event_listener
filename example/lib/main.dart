@@ -158,30 +158,42 @@ class HomePageState extends State<HomePage> {
           body: ListView(
             shrinkWrap: true,
             children: [
-              GamepadListTile(
-                autofocus: true,
-                title: Text('Mode button'),
-                subtitle: Text(modeButton),
+              GamepadFocus(
+                canRequestFocus: false,
                 onButton: (event) {
                   if (event.name == fireButton) {
-                    announce("$fireButton is already being used for firing.");
+                    if (event.state == ButtonState.released) {
+                      announce("$fireButton is already being used for firing.");
+                    }
                   } else {
                     setState(() => modeButton = event.name);
                   }
                 },
+                child: ListTile(
+                  autofocus: true,
+                  title: Text('Mode button'),
+                  subtitle: Text(modeButton),
+                  onTap: defaultOnTap,
+                ),
               ),
-              GamepadListTile(
-                title: Text('Fire button'),
-                subtitle: Text(fireButton),
+              GamepadFocus(
+                canRequestFocus: false,
                 onButton: (event) {
                   if (event.name == modeButton) {
-                    announce(
-                      'That button is already used for switching modes.',
-                    );
+                    if (event.state == ButtonState.released) {
+                      announce(
+                        'That button is already used for switching modes.',
+                      );
+                    }
                   } else {
                     setState(() => fireButton = event.name);
                   }
                 },
+                child: ListTile(
+                  title: Text('Fire button'),
+                  subtitle: Text(fireButton),
+                  onTap: defaultOnTap,
+                ),
               ),
             ],
           ),
